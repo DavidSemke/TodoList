@@ -4,6 +4,7 @@ const todo = (() => {
     const priorities = ['Low', 'Mid', 'High']
     const maxDepth = 1
     const projectList = []
+    let selectedProjectIndex = null
 
 
     // todo items could be extended to have their own todo list
@@ -217,11 +218,27 @@ const todo = (() => {
         projectList.splice(index, 1)
     }
 
+    function getSelectedProjectIndex() {
+        return selectedProjectIndex
+    }
+
+    function setSelectedProjectIndex(index) {
+        selectedProjectIndex = index
+
+    }
+
+    function getPriorities() {
+        return priorities
+    }
+
     return {
         TodoItem, 
         getProjectList, 
         addToProjectList, 
-        removeFromProjectList
+        removeFromProjectList,
+        getSelectedProjectIndex,
+        setSelectedProjectIndex,
+        getPriorities
     }
 
 })()

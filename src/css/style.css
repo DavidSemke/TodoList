@@ -20,9 +20,30 @@ h1 {
     padding: 10px;
 }
 
+label {
+    margin-right: 10px;
+}
+
+label::after {
+    content: ':';
+}
+
 ol {
     list-style: none;
     padding-left: 0;
+}
+
+.addView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px
+}
+
+.addView > form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .buttonLarge {
@@ -95,7 +116,7 @@ ol {
     overflow: auto;
 }
 
-#projectListView li {
+#projectViewBody li {
     width: 80%;
     margin: auto;
     margin-bottom: 5px;
@@ -108,7 +129,7 @@ ol {
     align-items: center;
 }
 
-#projectListView li:hover {
+#projectViewBody li:hover {
     background-color: rgb(204, 255, 246);
 }
 

@@ -340,9 +340,30 @@ h1 {
     padding: 10px;
 }
 
+label {
+    margin-right: 10px;
+}
+
+label::after {
+    content: ':';
+}
+
 ol {
     list-style: none;
     padding-left: 0;
+}
+
+.addView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px
+}
+
+.addView > form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .buttonLarge {
@@ -415,7 +436,7 @@ ol {
     overflow: auto;
 }
 
-#projectListView li {
+#projectViewBody li {
     width: 80%;
     margin: auto;
     margin-bottom: 5px;
@@ -428,7 +449,7 @@ ol {
     align-items: center;
 }
 
-#projectListView li:hover {
+#projectViewBody li:hover {
     background-color: rgb(204, 255, 246);
 }
 
@@ -559,6 +580,7 @@ const todo = (() => {
     const priorities = ['Low', 'Mid', 'High']
     const maxDepth = 1
     const projectList = []
+    let selectedProjectIndex = null
 
 
     // todo items could be extended to have their own todo list
@@ -772,11 +794,27 @@ const todo = (() => {
         projectList.splice(index, 1)
     }
 
+    function getSelectedProjectIndex() {
+        return selectedProjectIndex
+    }
+
+    function setSelectedProjectIndex(index) {
+        selectedProjectIndex = index
+
+    }
+
+    function getPriorities() {
+        return priorities
+    }
+
     return {
         TodoItem, 
         getProjectList, 
         addToProjectList, 
-        removeFromProjectList
+        removeFromProjectList,
+        getSelectedProjectIndex,
+        setSelectedProjectIndex,
+        getPriorities
     }
 
 })()
@@ -17998,14 +18036,16 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createProjectListView: () => (/* binding */ createProjectListView)
+/* harmony export */   createProjectView: () => (/* binding */ createProjectView)
 /* harmony export */ });
 /* harmony import */ var _logic_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _todoView__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 
 
 
-function createProjectListView() {
-    const view = document.querySelector('#projectListView')
+
+function createProjectView() {
+    const view = document.querySelector('#projectViewBody')
     view.innerHTML = ''
 
     const container = document.createElement('ol')
@@ -18014,26 +18054,32 @@ function createProjectListView() {
     for (let i=0; i<projectList.length; i++) {
         const project = projectList[i]
         
-        const titleDiv = document.createElement('div')
-        titleDiv.textContent = project.getTitle()
+        const header = document.createElement('h3')
+        header.textContent = project.getTitle()
         
         const delButton = document.createElement('button')
         delButton.classList.add('buttonSmall')
         delButton.textContent = '-'
         delButton.onclick = function (event) {
             _logic_js__WEBPACK_IMPORTED_MODULE_0__.todo.removeFromProjectList(i)
-            createProjectListView()
+            createProjectView()
+
+            if (_logic_js__WEBPACK_IMPORTED_MODULE_0__.todo.getSelectedProjectIndex() === i) {
+                (0,_todoView__WEBPACK_IMPORTED_MODULE_1__.createTodoView)(null)
+            }
+
             event.stopPropagation()
         }
         
         const li = document.createElement('li')
 
-        for (const el of [titleDiv, delButton]) {
+        for (const el of [header, delButton]) {
             li.appendChild(el)
         }
 
         li.onclick = function () {
-            createTodoView(project)
+            _logic_js__WEBPACK_IMPORTED_MODULE_0__.todo.setSelectedProjectIndex(i)
+            ;(0,_todoView__WEBPACK_IMPORTED_MODULE_1__.createTodoView)(project)
         }
         
         container.appendChild(li)
@@ -18043,9 +18089,26 @@ function createProjectListView() {
 }
 
 
+
+
+/***/ }),
+/* 14 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createTodoView: () => (/* binding */ createTodoView)
+/* harmony export */ });
+/* harmony import */ var _addView__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
+
+
+
 function createTodoView(project) {
     const view = document.querySelector('#todoView')
     view.innerHTML = ''
+
+    if (!project) { return }
     
     const projectDiv = document.createElement('div')
     projectDiv.classList.add('primaryContainer')
@@ -18059,7 +18122,7 @@ function createTodoView(project) {
     addButton.classList.add('buttonLarge')
     addButton.textContent = '+'
     addButton.onclick = function () {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ;(0,_addView__WEBPACK_IMPORTED_MODULE_0__.createAddTodoItemView)()
     }
 
     for (const el of [header, addButton]) {
@@ -18072,6 +18135,8 @@ function createTodoView(project) {
         projectDiv.appendChild(el)
     }
 
+    const itemListDiv = document.createElement('div')
+    itemListDiv.id = 'todoViewBody'
     const itemList = document.createElement('ol')
     const todoList = project.getTodoList()
 
@@ -18126,7 +18191,9 @@ function createTodoView(project) {
         itemList.appendChild(li)
     }
 
-    for (const el of [projectDiv, itemList]) {
+    itemListDiv.appendChild(itemList)
+
+    for (const el of [projectDiv, itemListDiv]) {
         view.appendChild(el)
     }
 }
@@ -18169,6 +18236,161 @@ function createMetaList(todoItem) {
     }
 
     return metaList
+}
+
+
+
+
+/***/ }),
+/* 15 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createAddProjectView: () => (/* binding */ createAddProjectView),
+/* harmony export */   createAddTodoItemView: () => (/* binding */ createAddTodoItemView)
+/* harmony export */ });
+/* harmony import */ var _logic_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _formField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+
+
+
+
+function createAddProjectView() {
+    const view = document.querySelector('#todoView')
+    view.innerHTML = ''
+
+    const addView = document.createElement('div')
+    addView.classList.add('addView')
+
+    const header = document.createElement('h2')
+    header.textContent = 'Add Project'
+
+    const form = createAddForm('addProject', '') //!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    for (const el of [header, form]) {
+        addView.appendChild(el)
+    }
+
+    view.appendChild(addView)
+
+    return view
+}
+
+
+function createAddTodoItemView() {
+    const view = document.querySelector('#todoViewBody')
+    view.innerHTML = ''
+
+    const addView = document.createElement('div')
+    addView.classList.add('addView')
+
+    const header = document.createElement('h3')
+    header.textContent = 'Add Todo Item'
+
+    const form = createAddForm('addTodoItem', '') //!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    for (const el of [header, form]) {
+        addView.appendChild(el)
+    }
+
+    view.appendChild(addView)
+
+    return view
+}
+
+
+function createAddForm(id, action) {
+    const form = document.createElement('form')
+    form.id = id
+    form.action = action
+    form.method = 'post'
+
+    const titleInput = (0,_formField__WEBPACK_IMPORTED_MODULE_1__.createInputField)('text', 'title', 'Title')
+    const descripInput = (0,_formField__WEBPACK_IMPORTED_MODULE_1__.createInputField)(
+        'textarea', 'descrip', 'Description'
+    )
+    const dueDateInput = (0,_formField__WEBPACK_IMPORTED_MODULE_1__.createInputField)('date', 'dueDate', 'Due Date')
+    const prioritySelector = (0,_formField__WEBPACK_IMPORTED_MODULE_1__.createSelectorField)(
+        _logic_js__WEBPACK_IMPORTED_MODULE_0__.todo.getPriorities(), 'priority', 'Priority'
+    )
+    const submitButton = document.createElement('button')
+    submitButton.type = 'submit'
+    submitButton.textContent = 'Submit'
+
+    const els = [
+        titleInput, 
+        descripInput, 
+        dueDateInput, 
+        prioritySelector, 
+        submitButton
+    ]
+
+    for (const el of els) {
+        form.appendChild(el)
+    }
+
+    return form
+}
+
+
+
+
+/***/ }),
+/* 16 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createInputField: () => (/* binding */ createInputField),
+/* harmony export */   createSelectorField: () => (/* binding */ createSelectorField)
+/* harmony export */ });
+function createInputField(type, name, labelText) {
+    const inputDiv = document.createElement('div')
+    
+    const id = `${name}Input`
+    const label = document.createElement('label')
+    label.textContent = labelText
+    label.for = id
+    const input = document.createElement('input')
+    input.type = type
+    input.id = id
+    input.name = name
+
+    for (const el of [label, input]) {
+        inputDiv.appendChild(el)
+    }
+
+    return inputDiv
+}
+
+
+function createSelectorField(options, name, labelText) {
+    const selectorDiv = document.createElement('div')
+
+    const id = `${name}Selector`
+    const label = document.createElement('label')
+    label.textContent = labelText
+    label.for = id
+    const selector = document.createElement('select')
+    selector.name = name
+    selector.id = id
+
+    for (const o of options) {
+        const option = document.createElement('option')
+        option.value = o
+        option.textContent = o
+
+        selector.appendChild(option)
+    }
+
+    for (const el of [label, selector]) {
+        selectorDiv.appendChild(el)
+    }
+
+    return selectorDiv
 }
 
 
@@ -18277,9 +18499,12 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _logic_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+/* harmony import */ var _projectView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+/* harmony import */ var _addView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+
+
 
 
 
@@ -18299,7 +18524,12 @@ child1.setProject(project1)
 project1.addToTodoList(child2)
 child2.setProject(project1)
 
-;(0,_views__WEBPACK_IMPORTED_MODULE_2__.createProjectListView)(_logic_js__WEBPACK_IMPORTED_MODULE_1__.todo)
+;(0,_projectView__WEBPACK_IMPORTED_MODULE_2__.createProjectView)(_logic_js__WEBPACK_IMPORTED_MODULE_1__.todo)
+
+const addProjectBtn = document.querySelector('#addProjectButton')
+addProjectBtn.onclick = function () {
+    ;(0,_addView__WEBPACK_IMPORTED_MODULE_3__.createAddProjectView)()
+}
 })();
 
 /******/ })()

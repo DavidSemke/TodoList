@@ -1,48 +1,11 @@
-import { todo } from './logic.js'
-
-
-function createProjectListView() {
-    const view = document.querySelector('#projectListView')
-    view.innerHTML = ''
-
-    const container = document.createElement('ol')
-    const projectList = todo.getProjectList()
-
-    for (let i=0; i<projectList.length; i++) {
-        const project = projectList[i]
-        
-        const titleDiv = document.createElement('div')
-        titleDiv.textContent = project.getTitle()
-        
-        const delButton = document.createElement('button')
-        delButton.classList.add('buttonSmall')
-        delButton.textContent = '-'
-        delButton.onclick = function (event) {
-            todo.removeFromProjectList(i)
-            createProjectListView()
-            event.stopPropagation()
-        }
-        
-        const li = document.createElement('li')
-
-        for (const el of [titleDiv, delButton]) {
-            li.appendChild(el)
-        }
-
-        li.onclick = function () {
-            createTodoView(project)
-        }
-        
-        container.appendChild(li)
-    }
-
-    view.appendChild(container)
-}
+import { createAddTodoItemView } from './addView'
 
 
 function createTodoView(project) {
     const view = document.querySelector('#todoView')
     view.innerHTML = ''
+
+    if (!project) { return }
     
     const projectDiv = document.createElement('div')
     projectDiv.classList.add('primaryContainer')
@@ -56,7 +19,7 @@ function createTodoView(project) {
     addButton.classList.add('buttonLarge')
     addButton.textContent = '+'
     addButton.onclick = function () {
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        createAddTodoItemView()
     }
 
     for (const el of [header, addButton]) {
@@ -69,6 +32,8 @@ function createTodoView(project) {
         projectDiv.appendChild(el)
     }
 
+    const itemListDiv = document.createElement('div')
+    itemListDiv.id = 'todoViewBody'
     const itemList = document.createElement('ol')
     const todoList = project.getTodoList()
 
@@ -123,7 +88,9 @@ function createTodoView(project) {
         itemList.appendChild(li)
     }
 
-    for (const el of [projectDiv, itemList]) {
+    itemListDiv.appendChild(itemList)
+
+    for (const el of [projectDiv, itemListDiv]) {
         view.appendChild(el)
     }
 }
@@ -169,4 +136,4 @@ function createMetaList(todoItem) {
 }
 
 
-export {createProjectListView}
+export {createTodoView}
