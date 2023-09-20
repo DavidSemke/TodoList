@@ -4,6 +4,7 @@ import { todo } from './logic.js'
 import {
     createInputField, createTextareaField, createSelectField
 } from './formField'
+import {saveToLocalStorage} from './storage.js'
 
 
 function createAddProjectView() {
@@ -28,6 +29,7 @@ function createAddProjectView() {
                 todo.getProjectList().length - 1
             )
             createTodoView(project)
+            saveToLocalStorage()
         }
         catch (error) {
             const errorText = document.querySelector('.errorText')
@@ -67,6 +69,7 @@ function createAddTodoItemView(project) {
             project.addToTodoList(todoItem)
             todoItem.setProject(project)
             createTodoView(project)
+            saveToLocalStorage()
         }
         catch (error) {
             const errorText = document.querySelector('.errorText')

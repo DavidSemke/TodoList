@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 const todo = (() => {
     const priorities = ['Low', 'Mid', 'High']
     const maxDepth = 1
@@ -151,6 +149,7 @@ const todo = (() => {
 
             _todoList.push(todoItem)
         }
+        
 
         function removeFromTodoList(index) {
             _todoList.splice(index, 1)
@@ -242,5 +241,6 @@ const todo = (() => {
     }
 
 })()
+
 
 export {todo}

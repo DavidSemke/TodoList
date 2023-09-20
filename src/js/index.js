@@ -1,19 +1,10 @@
 import '../css/style.css'
-import {localStorageAvailable} from './storage'
+import {extractFromLocalStorage} from './storage'
 import { createProjectView } from './projectView'
 import { createAddProjectView } from './addView'
 
 
-if (localStorageAvailable) {
-    
-}
-
-
-
-
-
-
-
+extractFromLocalStorage()
 createProjectView()
 
 const addProjectBtn = document.querySelector('#addProjectButton')

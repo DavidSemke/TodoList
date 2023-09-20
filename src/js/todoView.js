@@ -1,4 +1,5 @@
 import { createAddTodoItemView } from './addView'
+import {saveToLocalStorage} from './storage.js'
 
 
 function createTodoView(project) {
@@ -64,6 +65,7 @@ function createTodoView(project) {
         input.onclick = function (event) {
             todoItem.setComplete(!todoItem.getComplete())
             event.stopPropagation()
+            saveToLocalStorage()
         }
 
         const header = document.createElement('h3')
@@ -76,6 +78,7 @@ function createTodoView(project) {
             project.removeFromTodoList(i)
             createTodoView(project)
             event.stopPropagation()
+            saveToLocalStorage()
         }
 
         for (const el of [input, header, delButton]) {

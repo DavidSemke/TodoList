@@ -1,5 +1,6 @@
 import { todo } from './logic.js'
 import { createTodoView } from "./todoView"
+import {saveToLocalStorage} from './storage.js'
 
 
 function createProjectView() {
@@ -27,6 +28,7 @@ function createProjectView() {
             }
 
             event.stopPropagation()
+            saveToLocalStorage()
         }
         
         const li = document.createElement('li')
