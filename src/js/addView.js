@@ -1,5 +1,9 @@
+import { createProjectView } from './projectView'
+import { createTodoView } from './todoView'
 import { todo } from './logic.js'
-import {createInputField, createSelectorField} from './formField'
+import {
+    createInputField, createTextareaField, createSelectField
+} from './formField'
 
 
 function createAddProjectView() {
@@ -12,9 +16,29 @@ function createAddProjectView() {
     const header = document.createElement('h2')
     header.textContent = 'Add Project'
 
-    const form = createAddForm('addProject', '') //!!!!!!!!!!!!!!!!!!!!!!!!!
+    const form = createAddForm('addProject')
+    form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const project = submittedTodoItem()
 
-    for (const el of [header, form]) {
+        try {
+            todo.addToProjectList(project)
+            createProjectView()
+            todo.setSelectedProjectIndex(
+                todo.getProjectList().length - 1
+            )
+            createTodoView(project)
+        }
+        catch (error) {
+            const errorText = document.querySelector('.errorText')
+            errorText.textContent = error.toString()
+        }
+    })
+
+    const errorText = document.createElement('p')
+    errorText.classList.add('errorText')
+
+    for (const el of [header, form, errorText]) {
         addView.appendChild(el)
     }
 
@@ -24,7 +48,7 @@ function createAddProjectView() {
 }
 
 
-function createAddTodoItemView() {
+function createAddTodoItemView(project) {
     const view = document.querySelector('#todoViewBody')
     view.innerHTML = ''
 
@@ -34,9 +58,26 @@ function createAddTodoItemView() {
     const header = document.createElement('h3')
     header.textContent = 'Add Todo Item'
 
-    const form = createAddForm('addTodoItem', '') //!!!!!!!!!!!!!!!!!!!!!!!!!
+    const form = createAddForm('addTodoItem')
+    form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const todoItem = submittedTodoItem()
 
-    for (const el of [header, form]) {
+        try {
+            project.addToTodoList(todoItem)
+            todoItem.setProject(project)
+            createTodoView(project)
+        }
+        catch (error) {
+            const errorText = document.querySelector('.errorText')
+            errorText.textContent = error.toString()
+        }
+    })
+
+    const errorText = document.createElement('p')
+    errorText.classList.add('errorText')
+
+    for (const el of [header, form, errorText]) {
         addView.appendChild(el)
     }
 
@@ -46,18 +87,19 @@ function createAddTodoItemView() {
 }
 
 
-function createAddForm(id, action) {
+function createAddForm(id) {
     const form = document.createElement('form')
     form.id = id
-    form.action = action
-    form.method = 'post'
 
-    const titleInput = createInputField('text', 'title', 'Title')
-    const descripInput = createInputField(
-        'textarea', 'descrip', 'Description'
+    const titleInputField = createInputField('text', 'title', 'Title')
+    const titleInput = titleInputField.querySelector('input')
+    titleInput.required = true
+
+    const descripInputField = createTextareaField('descrip', 'Description')
+    const dueDateInputField = createInputField(
+        'date', 'dueDate', 'Due Date'
     )
-    const dueDateInput = createInputField('date', 'dueDate', 'Due Date')
-    const prioritySelector = createSelectorField(
+    const prioritySelectorField = createSelectField(
         todo.getPriorities(), 'priority', 'Priority'
     )
     const submitButton = document.createElement('button')
@@ -65,10 +107,10 @@ function createAddForm(id, action) {
     submitButton.textContent = 'Submit'
 
     const els = [
-        titleInput, 
-        descripInput, 
-        dueDateInput, 
-        prioritySelector, 
+        titleInputField, 
+        descripInputField, 
+        dueDateInputField, 
+        prioritySelectorField, 
         submitButton
     ]
 
@@ -77,6 +119,27 @@ function createAddForm(id, action) {
     }
 
     return form
+}
+
+
+function submittedTodoItem() {
+    // only title and priority are required
+    const titleInput = document.querySelector('#titleInput')
+    const title = titleInput.value
+
+    const descripInput = document.querySelector('#descripTextarea')
+    let descrip = descripInput.value ? descripInput.value : null
+
+    const dueDateInput = document.querySelector('#dueDateInput')
+    let dueDate = dueDateInput.value ? dueDateInput.value : null
+
+    const prioritySelector = document.querySelector('#prioritySelector')
+    let priority = prioritySelector.value
+
+    const todoItem = todo.TodoItem(title, descrip, dueDate)
+    todoItem.setPriority(priority)
+
+    return todoItem
 }
 
 

@@ -19,7 +19,7 @@ function createTodoView(project) {
     addButton.classList.add('buttonLarge')
     addButton.textContent = '+'
     addButton.onclick = function () {
-        createAddTodoItemView()
+        createAddTodoItemView(project)
     }
 
     for (const el of [header, addButton]) {
@@ -59,6 +59,7 @@ function createTodoView(project) {
 
         const input = document.createElement('input')
         input.type = 'checkbox'
+        input.classList.add('checkboxSmall')
         input.checked = todoItem.getComplete()
         input.onclick = function (event) {
             todoItem.setComplete(!todoItem.getComplete())

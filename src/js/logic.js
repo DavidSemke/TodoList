@@ -75,11 +75,11 @@ const todo = (() => {
         }
     
         function setPriority(newPriority) {
-            if (priorities.includes(newPriority)) {
-                _priority = newPriority
+            if (!priorities.includes(newPriority)) {
+                throw `'${newPriority}' is an invalid priority.`
             }
 
-            throw `'${newPriority}' is an invalid priority.`
+            _priority = newPriority
         }
 
         function getProject() {

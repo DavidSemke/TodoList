@@ -18,7 +18,26 @@ function createInputField(type, name, labelText) {
 }
 
 
-function createSelectorField(options, name, labelText) {
+function createTextareaField(name, labelText) {
+    const textareaDiv = document.createElement('div')
+    
+    const id = `${name}Textarea`
+    const label = document.createElement('label')
+    label.textContent = labelText
+    label.for = id
+    const textarea = document.createElement('textarea')
+    textarea.id = id
+    textarea.name = name
+
+    for (const el of [label, textarea]) {
+        textareaDiv.appendChild(el)
+    }
+
+    return textareaDiv
+}
+
+
+function createSelectField(options, name, labelText) {
     const selectorDiv = document.createElement('div')
 
     const id = `${name}Selector`
@@ -45,4 +64,4 @@ function createSelectorField(options, name, labelText) {
 }
 
 
-export {createInputField, createSelectorField}
+export {createInputField, createTextareaField, createSelectField}

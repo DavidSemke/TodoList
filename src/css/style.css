@@ -20,6 +20,11 @@ h1 {
     padding: 10px;
 }
 
+input.checkboxSmall {
+    height: 25px;
+    width: 25px;
+}
+
 label {
     margin-right: 10px;
 }
@@ -64,6 +69,10 @@ ol {
     gap: 30px;
 }
 
+.errorText {
+    color: red;
+}
+
 .metadataContainer {
     display: flex;
 }
@@ -90,7 +99,7 @@ ol {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 10px;
     cursor: pointer;
     border: 3px solid rgb(0, 187, 153);
     background-color: rgb(187, 236, 255);
@@ -120,7 +129,6 @@ ol {
     width: 80%;
     margin: auto;
     margin-bottom: 5px;
-    padding: 10px;
     cursor: pointer;
     border: 2px solid rgb(0, 187, 153);
 
