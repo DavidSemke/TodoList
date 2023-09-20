@@ -1,75 +1,73 @@
-import { todo } from './logic.js'
+import { todo } from "./logic.js";
 
-function saveToLocalStorage () {
+function saveToLocalStorage() {
   if (localStorageAvailable()) {
-    const data = []
+    const data = [];
 
     for (const project of todo.getProjectList()) {
-      data.push(encodeTodoItem(project))
+      data.push(encodeTodoItem(project));
     }
 
-    localStorage.projectList = JSON.stringify(data)
+    localStorage.projectList = JSON.stringify(data);
   }
 }
 
-function extractFromLocalStorage () {
+function extractFromLocalStorage() {
   if (localStorageAvailable()) {
-    const data = localStorage.projectList
+    const data = localStorage.projectList;
 
     if (data) {
-      const encodedTodoItems = JSON.parse(data)
+      const encodedTodoItems = JSON.parse(data);
 
       for (const item of encodedTodoItems) {
-        decodeTodoItem(item)
+        decodeTodoItem(item);
       }
     }
   }
 }
 
-function localStorageAvailable () {
-  const test = 'test'
+function localStorageAvailable() {
+  const test = "test";
 
   try {
-    localStorage.setItem(test, test)
-    localStorage.removeItem(test)
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
 
-    return true
+    return true;
   } catch (e) {
-    return false
+    return false;
   }
 }
 
 // Parameter project is null if parameter encodedTodoItem is root project
 // Does not return anything - data is placed directly into todo module
-function decodeTodoItem (encodedTodoItem, project) {
+function decodeTodoItem(encodedTodoItem, project) {
   const todoItem = todo.TodoItem(
     encodedTodoItem.title,
     encodedTodoItem.descrip,
-    encodedTodoItem.dueDate
-  )
-  todoItem.setPriority(encodedTodoItem.priority)
-  todoItem.setComplete(encodedTodoItem.complete)
+    encodedTodoItem.dueDate,
+  );
+  todoItem.setPriority(encodedTodoItem.priority);
+  todoItem.setComplete(encodedTodoItem.complete);
 
   if (project) {
-    project.addToTodoList(todoItem)
-    todoItem.setProject(project)
+    project.addToTodoList(todoItem);
+    todoItem.setProject(project);
   } else {
-    todo.addToProjectList(todoItem)
+    todo.addToProjectList(todoItem);
   }
 
   for (const item of encodedTodoItem.todoList) {
-    decodeTodoItem(item, todoItem)
+    decodeTodoItem(item, todoItem);
   }
 }
 
-function encodeTodoItem (todoItem) {
-  const encodedTodoList = []
-  const todoList = todoItem.getTodoList()
+function encodeTodoItem(todoItem) {
+  const encodedTodoList = [];
+  const todoList = todoItem.getTodoList();
 
   for (const item of todoList) {
-    encodedTodoList.push(
-      encodeTodoItem(item)
-    )
+    encodedTodoList.push(encodeTodoItem(item));
   }
 
   return {
@@ -78,8 +76,8 @@ function encodeTodoItem (todoItem) {
     dueDate: todoItem.getDueDate(),
     priority: todoItem.getPriority(),
     todoList: encodedTodoList,
-    complete: todoItem.getComplete()
-  }
+    complete: todoItem.getComplete(),
+  };
 }
 
-export { extractFromLocalStorage, saveToLocalStorage }
+export { extractFromLocalStorage, saveToLocalStorage };

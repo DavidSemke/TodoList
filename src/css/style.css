@@ -1,147 +1,148 @@
-body, html {
-    height: 100%;
+body,
+html {
+  height: 100%;
 }
 
 body {
-    background-color: rgb(204, 255, 246);
+  background-color: rgb(204, 255, 246);
 }
 
 dt {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 dt::after {
-    content: ':';
+  content: ":";
 }
 
 h1 {
-    text-align: center;
-    background-color: rgb(0, 183, 255);
-    padding: 10px;
+  text-align: center;
+  background-color: rgb(0, 183, 255);
+  padding: 10px;
 }
 
 input.checkboxSmall {
-    height: 25px;
-    width: 25px;
+  height: 25px;
+  width: 25px;
 }
 
 label {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 label::after {
-    content: ':';
+  content: ":";
 }
 
 ol {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 }
 
 .addView {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .addView > form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .buttonLarge {
-    height: 40px;
-    width: 40px;
-    font-size: large;
+  height: 40px;
+  width: 40px;
+  font-size: large;
 }
 
 .buttonSmall {
-    height: 25px;
-    width: 25px;
+  height: 25px;
+  width: 25px;
 }
 
 .headView {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
 }
 
 .errorText {
-    color: red;
+  color: red;
 }
 
 .metadataContainer {
-    display: flex;
+  display: flex;
 }
 
 .metadataContainer > div {
-    flex: 1;
-    margin-left: 20px;
+  flex: 1;
+  margin-left: 20px;
 }
 
 .metadataContainer > div:not(:first-child) dt {
-    float: left;
-    clear: left;
-    text-align: right;
+  float: left;
+  clear: left;
+  text-align: right;
 }
 
 .primaryContainer {
-    border: 5px solid rgb(0, 183, 255);
-    background-color: rgb(164, 255, 238);
-    margin-left: 10px;
-    margin-right: 10px;
+  border: 5px solid rgb(0, 183, 255);
+  background-color: rgb(164, 255, 238);
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .todoItem {
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    padding: 10px;
-    cursor: pointer;
-    border: 3px solid rgb(0, 187, 153);
-    background-color: rgb(187, 236, 255);
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  cursor: pointer;
+  border: 3px solid rgb(0, 187, 153);
+  background-color: rgb(187, 236, 255);
 }
 
 .todoItem:hover {
-    background-color: rgb(223, 246, 255);
+  background-color: rgb(223, 246, 255);
 }
 
 .todoItem > div {
-    display: flex;
-    align-items: center;
-    gap: 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 #content {
-    height: 90%;
-    display: flex;
+  height: 90%;
+  display: flex;
 }
 
 #projectView {
-    width: 20%;
-    overflow: auto;
+  width: 20%;
+  overflow: auto;
 }
 
 #projectViewBody li {
-    width: 80%;
-    margin: auto;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border: 2px solid rgb(0, 187, 153);
+  width: 80%;
+  margin: auto;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border: 2px solid rgb(0, 187, 153);
 
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 #projectViewBody li:hover {
-    background-color: rgb(204, 255, 246);
+  background-color: rgb(204, 255, 246);
 }
 
 #todoView {
-    width: 80%;
-    overflow: auto;
+  width: 80%;
+  overflow: auto;
 }

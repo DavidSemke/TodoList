@@ -1,178 +1,185 @@
 const todo = (() => {
-  const priorities = ['Low', 'Mid', 'High']
-  const maxDepth = 1
-  const projectList = []
-  let selectedProjectIndex = null
+  const priorities = ["Low", "Mid", "High"];
+  const maxDepth = 1;
+  const projectList = [];
+  let selectedProjectIndex = null;
 
   // todo items could be extended to have their own todo list
   // Parameter project can be null or another TodoItem
-  function TodoItem (title, descrip = null, dueDate = null) {
+  function TodoItem(title, descrip = null, dueDate = null) {
     // title also serves as ID
-    let _title = title
-    let _descrip = descrip
-    let _dueDate = dueDate
-    let _priority = 'Low'
-    let _project = null
-    const _todoList = []
-    let _depth = 0
-    let _complete = false
+    let _title = title;
+    let _descrip = descrip;
+    let _dueDate = dueDate;
+    let _priority = "Low";
+    let _project = null;
+    const _todoList = [];
+    let _depth = 0;
+    let _complete = false;
 
-    function getTitle () {
-      return _title
+    function getTitle() {
+      return _title;
     }
 
-    function setTitle (newTitle) {
+    function setTitle(newTitle) {
       // not yet assigned to a project, so title need not be
       // checked for uniqueness
       if (!_project && !isRootProject()) {
-        _title = newTitle
-        return
+        _title = newTitle;
+        return;
       }
 
-      let siblings = null
+      let siblings = null;
 
       if (_project) {
-        siblings = _project.getTodoList()
+        siblings = _project.getTodoList();
       } else {
-        siblings = projectList
+        siblings = projectList;
       }
 
       for (const sibling of siblings) {
-        const siblingTitle = sibling.getTitle().toUpperCase()
-        const title = newTitle.toUpperCase()
+        const siblingTitle = sibling.getTitle().toUpperCase();
+        const title = newTitle.toUpperCase();
 
         if (siblingTitle === title) {
-          throw `New title '${newTitle}' already exists.`
+          throw `New title '${newTitle}' already exists.`;
         }
       }
 
-      _title = newTitle
+      _title = newTitle;
     }
 
-    function getDescrip () {
-      return _descrip
+    function getDescrip() {
+      return _descrip;
     }
 
-    function setDescrip (newDescrip) {
-      _descrip = newDescrip
+    function setDescrip(newDescrip) {
+      _descrip = newDescrip;
     }
 
-    function getDueDate () {
-      return _dueDate
+    function getDueDate() {
+      return _dueDate;
     }
 
-    function setDueDate (newDueDate) {
-      _dueDate = newDueDate
+    function setDueDate(newDueDate) {
+      _dueDate = newDueDate;
     }
 
-    function getPriority () {
-      return _priority
+    function getPriority() {
+      return _priority;
     }
 
-    function setPriority (newPriority) {
+    function setPriority(newPriority) {
       if (!priorities.includes(newPriority)) {
-        throw `'${newPriority}' is an invalid priority.`
+        throw `'${newPriority}' is an invalid priority.`;
       }
 
-      _priority = newPriority
+      _priority = newPriority;
     }
 
-    function getProject () {
-      return _project
+    function getProject() {
+      return _project;
     }
 
-    function setProject (todoItem) {
+    function setProject(todoItem) {
       for (const child of todoItem.getTodoList()) {
         if (equals(child)) {
-          _project = todoItem
-          _depth = todoItem.getDepth() + 1
-          return
+          _project = todoItem;
+          _depth = todoItem.getDepth() + 1;
+          return;
         }
       }
 
-      throw `Tried to set project of TodoItem '${_title}' to ` +
-            `'${todoItem.getTitle()}' without adding to todoList first.`
+      throw (
+        `Tried to set project of TodoItem '${_title}' to ` +
+        `'${todoItem.getTitle()}' without adding to todoList first.`
+      );
     }
 
-    function getTodoList () {
-      return _todoList
+    function getTodoList() {
+      return _todoList;
     }
 
-    function getDepth () {
-      return _depth
+    function getDepth() {
+      return _depth;
     }
 
-    function getComplete () {
-      return _complete
+    function getComplete() {
+      return _complete;
     }
 
-    function setComplete (newComplete) {
-      _complete = newComplete
+    function setComplete(newComplete) {
+      _complete = newComplete;
     }
 
-    function isRootProject () {
+    function isRootProject() {
       for (const project of projectList) {
         if (equals(project)) {
-          return true
+          return true;
         }
       }
 
-      return false
+      return false;
     }
 
-    function addToTodoList (todoItem) {
+    function addToTodoList(todoItem) {
       if (!_project && !isRootProject()) {
-        throw `Tried to add to todoList of TodoItem '${_title}' ` +
-                'without defining project or making it a root project.'
+        throw (
+          `Tried to add to todoList of TodoItem '${_title}' ` +
+          "without defining project or making it a root project."
+        );
       }
 
       if (_depth === maxDepth) {
-        throw `Tried to add to TodoItem '${_title}', ` +
-                'which is at max depth.'
+        throw (
+          `Tried to add to TodoItem '${_title}', ` + "which is at max depth."
+        );
       }
 
-      const title = todoItem.getTitle().toUpperCase()
+      const title = todoItem.getTitle().toUpperCase();
 
       for (const item of _todoList) {
-        const existingTitle = item.getTitle().toUpperCase()
+        const existingTitle = item.getTitle().toUpperCase();
 
         if (title === existingTitle) {
-          throw `Tried to add TodoItem '${todoItem.getTitle()}' ` +
-                    `to todoList of TodoItem '${_title}', but title ` +
-                    'already exists.'
+          throw (
+            `Tried to add TodoItem '${todoItem.getTitle()}' ` +
+            `to todoList of TodoItem '${_title}', but title ` +
+            "already exists."
+          );
         }
       }
 
-      _todoList.push(todoItem)
+      _todoList.push(todoItem);
     }
 
-    function removeFromTodoList (index) {
-      _todoList.splice(index, 1)
+    function removeFromTodoList(index) {
+      _todoList.splice(index, 1);
     }
 
-    function equals (todoItem) {
-      let project = _project
-      let otherProject = todoItem.getProject()
+    function equals(todoItem) {
+      let project = _project;
+      let otherProject = todoItem.getProject();
 
-      let title = _title.toUpperCase()
-      let otherTitle = todoItem.getTitle().toUpperCase()
+      let title = _title.toUpperCase();
+      let otherTitle = todoItem.getTitle().toUpperCase();
 
       while (title === otherTitle && title) {
-        title = null
-        otherTitle = null
+        title = null;
+        otherTitle = null;
 
         if (project) {
-          title = project.getTitle().toUpperCase()
-          project = project.getProject()
+          title = project.getTitle().toUpperCase();
+          project = project.getProject();
         }
 
         if (otherProject) {
-          otherTitle = otherProject.getTitle().toUpperCase()
-          otherProject = otherProject.getProject()
+          otherTitle = otherProject.getTitle().toUpperCase();
+          otherProject = otherProject.getProject();
         }
       }
 
-      return title === otherTitle
+      return title === otherTitle;
     }
 
     return {
@@ -191,43 +198,45 @@ const todo = (() => {
       getComplete,
       setComplete,
       addToTodoList,
-      removeFromTodoList
-    }
+      removeFromTodoList,
+    };
   }
 
-  function getProjectList () {
-    return projectList
+  function getProjectList() {
+    return projectList;
   }
 
-  function addToProjectList (todoItem) {
-    const title = todoItem.getTitle().toUpperCase()
+  function addToProjectList(todoItem) {
+    const title = todoItem.getTitle().toUpperCase();
 
     for (const item of projectList) {
-      const existingTitle = item.getTitle().toUpperCase()
+      const existingTitle = item.getTitle().toUpperCase();
 
       if (title === existingTitle) {
-        throw `Tried to add TodoItem '${todoItem.getTitle()}' ` +
-                'to projectList, but title already exists.'
+        throw (
+          `Tried to add TodoItem '${todoItem.getTitle()}' ` +
+          "to projectList, but title already exists."
+        );
       }
     }
 
-    projectList.push(todoItem)
+    projectList.push(todoItem);
   }
 
-  function removeFromProjectList (index) {
-    projectList.splice(index, 1)
+  function removeFromProjectList(index) {
+    projectList.splice(index, 1);
   }
 
-  function getSelectedProjectIndex () {
-    return selectedProjectIndex
+  function getSelectedProjectIndex() {
+    return selectedProjectIndex;
   }
 
-  function setSelectedProjectIndex (index) {
-    selectedProjectIndex = index
+  function setSelectedProjectIndex(index) {
+    selectedProjectIndex = index;
   }
 
-  function getPriorities () {
-    return priorities
+  function getPriorities() {
+    return priorities;
   }
 
   return {
@@ -237,8 +246,8 @@ const todo = (() => {
     removeFromProjectList,
     getSelectedProjectIndex,
     setSelectedProjectIndex,
-    getPriorities
-  }
-})()
+    getPriorities,
+  };
+})();
 
-export { todo }
+export { todo };
