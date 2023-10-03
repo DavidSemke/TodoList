@@ -1,8 +1,8 @@
-import { createAddTodoItemView } from "./addView";
+import { createAddTaskView } from "./addView";
 import { saveToLocalStorage } from "./storage.js";
 
-function createTodoView(project) {
-  const view = document.querySelector("#todoView");
+function createTaskView(project) {
+  const view = document.querySelector("#taskView");
   view.innerHTML = "";
 
   if (!project) {
@@ -21,7 +21,7 @@ function createTodoView(project) {
   addButton.classList.add("buttonLarge");
   addButton.textContent = "+";
   addButton.onclick = function () {
-    createAddTodoItemView(project);
+    createAddTaskView(project);
   };
 
   for (const el of [header, addButton]) {
@@ -35,17 +35,17 @@ function createTodoView(project) {
   }
 
   const itemListDiv = document.createElement("div");
-  itemListDiv.id = "todoViewBody";
+  itemListDiv.id = "taskViewBody";
   const itemList = document.createElement("ol");
-  const todoList = project.getTodoList();
+  const taskList = project.getTaskList();
 
-  for (let i = 0; i < todoList.length; i++) {
-    const todoItem = todoList[i];
+  for (let i = 0; i < taskList.length; i++) {
+    const task = taskList[i];
 
     const li = document.createElement("li");
-    li.classList.add("todoItem");
+    li.classList.add("task");
 
-    const metaList = createMetaList(todoItem);
+    const metaList = createMetaList(task);
     metaList.style.display = "none";
 
     li.onclick = function () {
@@ -56,36 +56,36 @@ function createTodoView(project) {
       }
     };
 
-    const todoItemHead = document.createElement("div");
+    const TaskHead = document.createElement("div");
 
     const input = document.createElement("input");
     input.type = "checkbox";
     input.classList.add("checkboxSmall");
-    input.checked = todoItem.getComplete();
+    input.checked = task.getComplete();
     input.onclick = function (event) {
-      todoItem.setComplete(!todoItem.getComplete());
+      task.setComplete(!task.getComplete());
       event.stopPropagation();
       saveToLocalStorage();
     };
 
     const header = document.createElement("h3");
-    header.textContent = todoItem.getTitle();
+    header.textContent = task.getTitle();
 
     const delButton = document.createElement("button");
     delButton.classList.add("buttonSmall");
     delButton.textContent = "-";
     delButton.onclick = function (event) {
-      project.removeFromTodoList(i);
-      createTodoView(project);
+      project.removeFromTaskList(i);
+      createTaskView(project);
       event.stopPropagation();
       saveToLocalStorage();
     };
 
     for (const el of [input, header, delButton]) {
-      todoItemHead.appendChild(el);
+      TaskHead.appendChild(el);
     }
 
-    for (const el of [todoItemHead, metaList]) {
+    for (const el of [TaskHead, metaList]) {
       li.appendChild(el);
     }
 
@@ -99,7 +99,7 @@ function createTodoView(project) {
   }
 }
 
-function createMetaList(todoItem) {
+function createMetaList(task) {
   const metaList = document.createElement("dl");
   metaList.classList.add("metadataContainer");
 
@@ -108,7 +108,7 @@ function createMetaList(todoItem) {
   const descripLabel = document.createElement("dt");
   descripLabel.textContent = "Description";
   const description = document.createElement("dd");
-  description.textContent = todoItem.getDescrip() ?? "None";
+  description.textContent = task.getDescrip() ?? "None";
 
   for (const el of [descripLabel, description]) {
     descripDiv.appendChild(el);
@@ -116,8 +116,8 @@ function createMetaList(todoItem) {
 
   const otherDiv = document.createElement("div");
   const otherData = {
-    "Due Date": todoItem.getDueDate() ?? "None",
-    Priority: todoItem.getPriority(),
+    "Due Date": task.getDueDate() ?? "None",
+    Priority: task.getPriority(),
   };
 
   for (const pair of Object.entries(otherData)) {
@@ -138,4 +138,4 @@ function createMetaList(todoItem) {
   return metaList;
 }
 
-export { createTodoView };
+export { createTaskView };

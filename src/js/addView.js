@@ -1,5 +1,5 @@
 import { createProjectView } from "./projectView";
-import { createTodoView } from "./todoView";
+import { createTaskView } from "./taskView";
 import { todo } from "./logic.js";
 import {
   createInputField,
@@ -9,7 +9,7 @@ import {
 import { saveToLocalStorage } from "./storage.js";
 
 function createAddProjectView() {
-  const view = document.querySelector("#todoView");
+  const view = document.querySelector("#taskView");
   view.innerHTML = "";
 
   const addView = document.createElement("div");
@@ -21,13 +21,13 @@ function createAddProjectView() {
   const form = createAddForm("addProject");
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const project = submittedTodoItem();
+    const project = submittedTask();
 
     try {
       todo.addToProjectList(project);
       createProjectView();
       todo.setSelectedProjectIndex(todo.getProjectList().length - 1);
-      createTodoView(project);
+      createTaskView(project);
       saveToLocalStorage();
     } catch (error) {
       const errorText = document.querySelector(".errorText");
@@ -47,25 +47,25 @@ function createAddProjectView() {
   return view;
 }
 
-function createAddTodoItemView(project) {
-  const view = document.querySelector("#todoViewBody");
+function createAddTaskView(project) {
+  const view = document.querySelector("#taskViewBody");
   view.innerHTML = "";
 
   const addView = document.createElement("div");
   addView.classList.add("addView");
 
   const header = document.createElement("h3");
-  header.textContent = "Add Todo Item";
+  header.textContent = "Add Task";
 
-  const form = createAddForm("addTodoItem");
+  const form = createAddForm("addTask");
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const todoItem = submittedTodoItem();
+    const task = submittedTask();
 
     try {
-      project.addToTodoList(todoItem);
-      todoItem.setProject(project);
-      createTodoView(project);
+      project.addToTaskList(task);
+      task.setProject(project);
+      createTaskView(project);
       saveToLocalStorage();
     } catch (error) {
       const errorText = document.querySelector(".errorText");
@@ -119,7 +119,7 @@ function createAddForm(id) {
   return form;
 }
 
-function submittedTodoItem() {
+function submittedTask() {
   // only title and priority are required
   const titleInput = document.querySelector("#titleInput");
   const title = titleInput.value;
@@ -133,10 +133,10 @@ function submittedTodoItem() {
   const prioritySelector = document.querySelector("#prioritySelector");
   const priority = prioritySelector.value;
 
-  const todoItem = todo.TodoItem(title, descrip, dueDate);
-  todoItem.setPriority(priority);
+  const task = todo.TodoItem(title, descrip, dueDate);
+  task.setPriority(priority);
 
-  return todoItem;
+  return task;
 }
 
-export { createAddProjectView, createAddTodoItemView };
+export { createAddProjectView, createAddTaskView };

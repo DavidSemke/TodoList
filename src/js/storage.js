@@ -51,7 +51,7 @@ function decodeTodoItem(encodedTodoItem, project) {
   todoItem.setComplete(encodedTodoItem.complete);
 
   if (project) {
-    project.addToTodoList(todoItem);
+    project.addToTaskList(todoItem);
     todoItem.setProject(project);
   } else {
     todo.addToProjectList(todoItem);
@@ -63,11 +63,11 @@ function decodeTodoItem(encodedTodoItem, project) {
 }
 
 function encodeTodoItem(todoItem) {
-  const encodedTodoList = [];
-  const todoList = todoItem.getTodoList();
+  const encodedTaskList = [];
+  const taskList = todoItem.getTaskList();
 
-  for (const item of todoList) {
-    encodedTodoList.push(encodeTodoItem(item));
+  for (const item of taskList) {
+    encodedTaskList.push(encodeTodoItem(item));
   }
 
   return {
@@ -75,7 +75,7 @@ function encodeTodoItem(todoItem) {
     descrip: todoItem.getDescrip(),
     dueDate: todoItem.getDueDate(),
     priority: todoItem.getPriority(),
-    todoList: encodedTodoList,
+    todoList: encodedTaskList,
     complete: todoItem.getComplete(),
   };
 }

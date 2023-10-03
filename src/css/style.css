@@ -96,7 +96,7 @@ ol {
   margin-right: 10px;
 }
 
-.todoItem {
+.task {
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
@@ -106,11 +106,11 @@ ol {
   background-color: rgb(187, 236, 255);
 }
 
-.todoItem:hover {
+.task:hover {
   background-color: rgb(223, 246, 255);
 }
 
-.todoItem > div {
+.task > div {
   display: flex;
   align-items: center;
   gap: 30px;
@@ -142,7 +142,7 @@ ol {
   background-color: rgb(204, 255, 246);
 }
 
-#todoView {
+#taskView {
   width: 80%;
   overflow: auto;
 }

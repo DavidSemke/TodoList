@@ -1,10 +1,17 @@
+/* 
+Projects are TodoItems that do not have a parent TodoItem and are part
+of the todo module's project list.
+
+Tasks are TodoItems that do have a parent TodoItem.
+*/
+
 const todo = (() => {
   const priorities = ["Low", "Mid", "High"];
   const maxDepth = 1;
   const projectList = [];
   let selectedProjectIndex = null;
 
-  // todo items could be extended to have their own todo list
+  // tasks could be extended to have their own task list
   // Parameter project can be null or another TodoItem
   function TodoItem(title, descrip = null, dueDate = null) {
     // title also serves as ID
@@ -13,7 +20,7 @@ const todo = (() => {
     let _dueDate = dueDate;
     let _priority = "Low";
     let _project = null;
-    const _todoList = [];
+    const _taskList = [];
     let _depth = 0;
     let _complete = false;
 
@@ -32,7 +39,7 @@ const todo = (() => {
       let siblings = null;
 
       if (_project) {
-        siblings = _project.getTodoList();
+        siblings = _project.getTaskList();
       } else {
         siblings = projectList;
       }
@@ -42,7 +49,7 @@ const todo = (() => {
         const title = newTitle.toUpperCase();
 
         if (siblingTitle === title) {
-          throw `New title '${newTitle}' already exists.`;
+          throw new Error(`New title '${newTitle}' already exists.`);
         }
       }
 
@@ -71,7 +78,7 @@ const todo = (() => {
 
     function setPriority(newPriority) {
       if (!priorities.includes(newPriority)) {
-        throw `'${newPriority}' is an invalid priority.`;
+        throw new Error(`'${newPriority}' is an invalid priority.`);
       }
 
       _priority = newPriority;
@@ -82,7 +89,7 @@ const todo = (() => {
     }
 
     function setProject(todoItem) {
-      for (const child of todoItem.getTodoList()) {
+      for (const child of todoItem.getTaskList()) {
         if (equals(child)) {
           _project = todoItem;
           _depth = todoItem.getDepth() + 1;
@@ -90,14 +97,15 @@ const todo = (() => {
         }
       }
 
-      throw (
+      throw new Error(
         `Tried to set project of TodoItem '${_title}' to ` +
-        `'${todoItem.getTitle()}' without adding to todoList first.`
+          `'${todoItem.getTitle()}' without adding it to project's` +
+          `taskList first.`,
       );
     }
 
-    function getTodoList() {
-      return _todoList;
+    function getTaskList() {
+      return _taskList;
     }
 
     function getDepth() {
@@ -122,39 +130,39 @@ const todo = (() => {
       return false;
     }
 
-    function addToTodoList(todoItem) {
+    function addToTaskList(todoItem) {
       if (!_project && !isRootProject()) {
-        throw (
-          `Tried to add to todoList of TodoItem '${_title}' ` +
-          "without defining project or making it a root project."
+        throw new Error(
+          `Tried to add to taskList of TodoItem '${_title}' ` +
+            "without defining project or making it a root project.",
         );
       }
 
       if (_depth === maxDepth) {
-        throw (
-          `Tried to add to TodoItem '${_title}', ` + "which is at max depth."
+        throw new Error(
+          `Tried to add to TodoItem '${_title}', which is at max depth.`,
         );
       }
 
       const title = todoItem.getTitle().toUpperCase();
 
-      for (const item of _todoList) {
+      for (const item of _taskList) {
         const existingTitle = item.getTitle().toUpperCase();
 
         if (title === existingTitle) {
-          throw (
+          throw new Error(
             `Tried to add TodoItem '${todoItem.getTitle()}' ` +
-            `to todoList of TodoItem '${_title}', but title ` +
-            "already exists."
+              `to taskList of TodoItem '${_title}', but title ` +
+              "already exists.",
           );
         }
       }
 
-      _todoList.push(todoItem);
+      _taskList.push(todoItem);
     }
 
-    function removeFromTodoList(index) {
-      _todoList.splice(index, 1);
+    function removeFromTaskList(index) {
+      _taskList.splice(index, 1);
     }
 
     function equals(todoItem) {
@@ -193,12 +201,12 @@ const todo = (() => {
       setPriority,
       getProject,
       setProject,
-      getTodoList,
+      getTaskList,
       getDepth,
       getComplete,
       setComplete,
-      addToTodoList,
-      removeFromTodoList,
+      addToTaskList,
+      removeFromTaskList,
     };
   }
 
@@ -213,9 +221,9 @@ const todo = (() => {
       const existingTitle = item.getTitle().toUpperCase();
 
       if (title === existingTitle) {
-        throw (
+        throw new Error(
           `Tried to add TodoItem '${todoItem.getTitle()}' ` +
-          "to projectList, but title already exists."
+            "to projectList, but title already exists.",
         );
       }
     }

@@ -1,5 +1,5 @@
 import { todo } from "./logic.js";
-import { createTodoView } from "./todoView";
+import { createTaskView } from "./taskView.js";
 import { saveToLocalStorage } from "./storage.js";
 
 function createProjectView() {
@@ -23,7 +23,7 @@ function createProjectView() {
       createProjectView();
 
       if (todo.getSelectedProjectIndex() === i) {
-        createTodoView(null);
+        createTaskView(null);
       }
 
       event.stopPropagation();
@@ -38,7 +38,7 @@ function createProjectView() {
 
     li.onclick = function () {
       todo.setSelectedProjectIndex(i);
-      createTodoView(project);
+      createTaskView(project);
     };
 
     container.appendChild(li);
